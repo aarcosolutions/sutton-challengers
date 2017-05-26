@@ -1,0 +1,48 @@
+<html>
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+</head>
+
+<body>
+    <button id="btnGetMatches">Get Matches</button>
+    <div id="matchTable"></div>
+</body>
+<script>
+    $(document).ready(function () {
+        $("#btnGetMatches").click(function () {
+            getMatches(2017);
+        });
+    });
+
+    function getMatches(season) {
+        var settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://[your-aws-gateway-endpoint]/[deployment-name]/matches?season=" + season ,
+            "method": "GET",
+            "contentType":    'application/json'
+        }
+
+        $.ajax(settings).done(function (response) {
+            table(response);
+        });
+    }
+
+    function table(data) {
+        var matchTable = "<table><tbody>";
+        data.matches.forEach(function (item) {
+            matchTable += "<tr><td>Match date</td><td>" + item.match_date + "</td></tr>"
+            matchTable += "<tr><td>Match time</td><td>" + item.match_time + "</td></tr>"
+            matchTable += "<tr><td>Home club name</td><td>" + item.home_club_name + "</td></tr>"
+            matchTable += "<tr><td>Home team name</td><td>" + item.home_team_name + "</td></tr>"
+            matchTable += "<tr><td>Away club name</td><td>" + item.away_club_name + "</td></tr>"
+            matchTable += "<tr><td>Away team name</td><td>" + item.away_team_name + "</td></tr>"
+            matchTable += "<tr><td>---</td><td>---</td></tr>"
+        });
+        matchTable += "</tbody></table>";
+        $('#matchTable').html(matchTable);
+    }
+</script>
+
+</html>
